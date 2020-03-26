@@ -77,7 +77,9 @@ bool CN64Sym::AddResult(search_result_t result)
 		//Log("    %08X %s\n", result.address, result.name);
 		return true;
 	}
+	Log("    Found result at NULL: %08X %s\n", result.address, result.name);
 	m_Results->push_back(result);
+	return true;
 }
 
 bool CN64Sym::ResultCmp(search_result_t a, search_result_t b)
@@ -262,7 +264,7 @@ bool CN64Sym::ElfTextDataCompare(CElfContext* elf, const char* data, int* nBytes
 			// if for some reason the relocation is on a NOP, don't count it
 			if(data[i] == 0x00000000)
 			{
-				*nBytesMatched == i;
+				*nBytesMatched = i;
 				return false;
 			}
 
@@ -288,7 +290,7 @@ bool CN64Sym::ElfTextDataCompare(CElfContext* elf, const char* data, int* nBytes
 		//	{
 		//		continue;
 		//	}
-//
+		//
 		//	if(cur_relocation_offset == i)
 		//	{
 		//		have_relocation = true;
@@ -529,7 +531,7 @@ void CN64Sym::ScanRecursive(const char* path)
 	while ((entry = readdir(dir)) != NULL)
 	{
 		char next_path[PATH_MAX];
-		if (!entry->d_name) continue;
+		if (entry->d_name[0] == '\0') continue;
 		snprintf(next_path, sizeof(next_path), "%s/%s", path, entry->d_name);
 		switch (entry->d_type) {
 			case DT_DIR:

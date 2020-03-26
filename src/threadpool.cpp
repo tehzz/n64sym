@@ -4,6 +4,7 @@
 #include <unistd.h>
 
 #include <stdio.h>
+#include <string.h>
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
@@ -14,7 +15,7 @@
 
 CThreadPool::CThreadPool()
 {
-    m_DefaultMutex = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_t m_DefaultMutex = PTHREAD_MUTEX_INITIALIZER;
     m_NumWorkers = GetNumCPUCores();
     m_Workers = new worker_context_t[m_NumWorkers];
     memset(m_Workers, 0, sizeof(worker_context_t) * m_NumWorkers);
@@ -41,6 +42,8 @@ void* CThreadPool::RoutineProc(void* _worker)
     worker_context_t* worker = (worker_context_t*) _worker;
     worker->routine(worker->param);
     worker->bRunning = false;
+
+    return NULL;
 }
 
 void CThreadPool::AddWorker(worker_routine_t routine, void* param)
