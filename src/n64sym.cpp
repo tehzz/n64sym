@@ -439,6 +439,7 @@ void* CN64Sym::ProcessObjectProc(void* _objProcessingCtx)
 	_this->ProcessObject(objProcessingCtx);
 
 	delete objProcessingCtx;
+	return NULL;
 }
 
 void CN64Sym::ProcessLibrary(const char* path)
@@ -559,7 +560,7 @@ void CN64Sym::ScanRecursive(const char* path)
 	closedir(dir);
 }
 
-bool CN64Sym::Run()
+void CN64Sym::Run()
 {
 	for(int i = 0; i < m_LibPaths->size(); i++)
 	{

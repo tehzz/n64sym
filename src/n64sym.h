@@ -76,7 +76,7 @@ public:
 	size_t DataSize();
 
 	void AddLibPath(const char* libPath);
-	bool Run();
+	void Run();
 
 	void ScanRecursive(const char* path);
 
